@@ -1,55 +1,35 @@
-#include <stdio.h>
-#include <string.h>
+/************************************************
+This code uses must basic concepts of the C
+language for implement a hangman game
+author: sergio lucio
+github: srg-lc
+email: sergiolucio.ns@gmail.com
 
-char secretWord[20], try = ' ', tries[20], aux_word[20];
-int win = 0, lose = 0, i = 0, qtTries = 0;
+See hangman_game.h for function details.
+For compile this code, running:
+LINUX: ~$./hangman_game
 
-void choiceWord(){
+If you want to add a new word, add it in a words.txt
+and update the first line with the new quantity
+of words.
+*************************************************/
+#include "hangman_game.h"
+
+int main() {
+  int hits = 0, wrongs = 0;
+  // Show game opening.
   printf("=================================\n");
   printf("====>     HANGMAN GAME      <====\n");
   printf("=================================\n");
-  sprintf(secretWord, "palavrateste");
-
-}
-
-void hideWord(){
-  for (i = 0; i < strlen(secretWord); i++) {
-    aux_word[i] = '_';
-  }
-  aux_word[i]='\0';
-}
-
-int showHang(){
-  for(int i = 0; i < strlen(secretWord); i++){
-    if(secretWord[i]==try){
-      aux_word[i] = try;
-    }
-    if(try != ' ' && tries[i] == try){
-      printf("\nRepeated letter, try other: \n");
-      printf("-> %c <-\n",try);
-      printf("WORD --->  %s \n", aux_word);
-      return 0;
-    }
-  }
-  tries[qtTries] = try;
-  qtTries++;
-  printf("WORD --->  %s \n", aux_word);
-}
-
-int makeGuess(){
-  setbuf(stdin, NULL);
-  scanf(" %c", &try);
-}
-
-int main() {
   choiceWord();
   hideWord();
-  showHang();
+  showHang(&hits, &wrongs);
 
+  // Game repeat loop, continues until player wins or loses.
   do {
     makeGuess();
-    showHang();
-  } while (!win && !lose);
+    showHang(&hits,& wrongs);
+  } while (!win() && !lose(&wrongs));
 
   return 0;
 }
